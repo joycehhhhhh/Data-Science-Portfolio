@@ -13,4 +13,26 @@ df2.columns
 for col in df2:
 	print(f'{col}:{df1[col].unique()'})
 
+#prepare to do the analysis
+X=df2.drop('Churn', axis='columns')
+y=df2['Churn']
 
+#the analysis
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test=train_test_split(X, y, test_size=0.2, random_state=5)
+
+import tensorflow as tf
+from tensorflow import keras
+model = keras.Sequential([
+    keras.layers.Dense(26, input_shape=(26,), activation='relu'),
+    keras.layers.Dense(15, activation='relu'),
+    keras.layers.Dense(1, activation='sigmoid')
+])
+
+# opt = keras.optimizers.Adam(learning_rate=0.01)
+
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=100)
